@@ -9,6 +9,7 @@ export interface CreateTenantInput {
 
 export interface UpdateTenantInput {
   name?: string
+  email?: string
   planType?: string
   planLimit?: number
   status?: string
@@ -65,6 +66,7 @@ export async function getTenantById(id: string) {
 export async function updateTenant(id: string, input: UpdateTenantInput) {
   const updateData: Record<string, unknown> = {}
   if (input.name !== undefined) updateData['name'] = input.name
+  if (input.email !== undefined) updateData['email'] = input.email
   if (input.status !== undefined) updateData['status'] = input.status
   if (input.planType !== undefined) {
     updateData['planType'] = input.planType

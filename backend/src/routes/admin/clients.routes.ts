@@ -1,10 +1,13 @@
+import { randomBytes } from 'crypto'
 import { Router } from 'express'
 import { z } from 'zod'
+import bcrypt from 'bcrypt'
 import { requireAdmin } from '../../middleware/auth'
 import { validateBody, validateQuery } from '../../middleware/validate'
 import * as tenantService from '../../services/tenant.service'
 import * as inviteService from '../../services/invite.service'
 import * as emailService from '../../services/email.service'
+import { prisma } from '../../config/db'
 
 const router = Router()
 
@@ -70,6 +73,7 @@ router.get('/:id', async (req, res, next) => {
 
 const updateSchema = z.object({
   name: z.string().min(1).max(255).optional(),
+  email: z.string().email().optional(),
   planType: z.enum(['one', 'five', 'unlimited', 'custom']).optional(),
   planLimit: z.number().int().positive().optional(),
   status: z.enum(['active', 'inactive']).optional(),
@@ -79,6 +83,24 @@ router.patch('/:id', validateBody(updateSchema), async (req, res, next) => {
   try {
     const tenant = await tenantService.updateTenant(req.params['id']!, req.body as tenantService.UpdateTenantInput)
     res.json(tenant)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.post('/:id/reset-password', async (req, res, next) => {
+  try {
+    const tenant = await tenantService.getTenantById(req.params['id']!)
+    if (!tenant) { res.status(404).json({ error: 'Cliente não encontrado' }); return }
+
+    const user = await prisma.user.findFirst({ where: { tenantId: req.params['id']!, role: 'client' } })
+    if (!user) { res.status(404).json({ error: 'Usuário do cliente não encontrado. Conta ainda não foi ativada.' }); return }
+
+    const temporaryPassword = randomBytes(4).toString('hex')
+    const passwordHash = await bcrypt.hash(temporaryPassword, 12)
+    await prisma.user.update({ where: { id: user.id }, data: { passwordHash } })
+
+    res.json({ temporaryPassword })
   } catch (err) {
     next(err)
   }
