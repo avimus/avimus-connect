@@ -74,6 +74,9 @@ export default function ApiKeysPage() {
           <a href={docsUrl} target="_blank" rel="noopener noreferrer" className="text-sm" style={{ color: 'var(--accent)' }}>
             Ver Documentação →
           </a>
+          <a href="http://34.171.150.35:21465/api-docs/#/" target="_blank" rel="noopener noreferrer" className="text-sm" style={{ color: 'var(--accent)' }}>
+            Docs WPPConnect →
+          </a>
           <button className="btn-primary" onClick={() => setShowModal(true)}>+ Nova API Key</button>
         </div>
       </div>
