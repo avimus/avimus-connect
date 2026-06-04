@@ -53,7 +53,7 @@ export function LogViewer({ adminView = false, tenantId }: LogViewerProps) {
 
   return (
     <div>
-      <div className="flex gap-3 mb-4">
+      <div className="flex flex-col sm:flex-row gap-3 mb-4">
         {adminView && (
           <input
             className="input-dark flex-1"
@@ -62,7 +62,7 @@ export function LogViewer({ adminView = false, tenantId }: LogViewerProps) {
             onChange={(e) => setFilterClient(e.target.value)}
           />
         )}
-        <select className="input-dark w-48" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+        <select className="input-dark sm:w-48" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="">Todos os tipos</option>
           {Object.entries(eventTypeLabel).map(([val, label]) => (
             <option key={val} value={val}>{label}</option>
@@ -71,37 +71,39 @@ export function LogViewer({ adminView = false, tenantId }: LogViewerProps) {
       </div>
 
       {isLoading ? (
-        <p style={{ color: 'rgba(240,240,255,0.4)' }}>Carregando logs...</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Carregando logs...</p>
       ) : (
         <div className="glass-card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ borderBottom: '1px solid rgba(119,94,252,0.15)' }}>
-                {['Horário', 'Instância', adminView && 'Cliente', 'Evento'].filter(Boolean).map((h) => (
-                  <th key={String(h)} className="text-left px-4 py-3 font-semibold" style={{ color: 'rgba(240,240,255,0.5)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {(data?.data ?? []).map((log) => (
-                <tr key={log.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <td className="px-4 py-2.5 text-xs font-mono" style={{ color: 'rgba(240,240,255,0.5)' }}>
-                    {new Date(log.occurredAt).toLocaleString('pt-BR')}
-                  </td>
-                  <td className="px-4 py-2.5" style={{ color: 'rgba(240,240,255,0.7)' }}>{log.instance.name}</td>
-                  {adminView && <td className="px-4 py-2.5" style={{ color: 'rgba(240,240,255,0.5)' }}>{log.tenant?.name ?? '—'}</td>}
-                  <td className="px-4 py-2.5">
-                    <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: `${eventTypeColor[log.eventType] ?? '#6B7280'}22`, color: eventTypeColor[log.eventType] ?? '#6B7280' }}>
-                      {eventTypeLabel[log.eventType] ?? log.eventType}
-                    </span>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[500px]">
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-sidebar)' }}>
+                  {['Horário', 'Instância', adminView && 'Cliente', 'Evento'].filter(Boolean).map((h) => (
+                    <th key={String(h)} className="text-left px-4 py-3 font-semibold" style={{ color: 'var(--text-secondary)' }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-              {(data?.data ?? []).length === 0 && (
-                <tr><td colSpan={adminView ? 4 : 3} className="px-4 py-8 text-center" style={{ color: 'rgba(240,240,255,0.3)' }}>Nenhum evento registrado.</td></tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {(data?.data ?? []).map((log) => (
+                  <tr key={log.id} style={{ borderBottom: '1px solid rgba(119,94,252,0.06)' }}>
+                    <td className="px-4 py-2.5 text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>
+                      {new Date(log.occurredAt).toLocaleString('pt-BR')}
+                    </td>
+                    <td className="px-4 py-2.5" style={{ color: 'var(--text-label)' }}>{log.instance.name}</td>
+                    {adminView && <td className="px-4 py-2.5" style={{ color: 'var(--text-secondary)' }}>{log.tenant?.name ?? '—'}</td>}
+                    <td className="px-4 py-2.5">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: `${eventTypeColor[log.eventType] ?? '#6B7280'}22`, color: eventTypeColor[log.eventType] ?? '#6B7280' }}>
+                        {eventTypeLabel[log.eventType] ?? log.eventType}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {(data?.data ?? []).length === 0 && (
+                  <tr><td colSpan={adminView ? 4 : 3} className="px-4 py-8 text-center" style={{ color: 'var(--text-subtle)' }}>Nenhum evento registrado.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

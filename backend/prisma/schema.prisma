@@ -83,3 +83,16 @@ model EventLog {
   @@index([occurredAt(sort: Desc)])
   @@map("event_logs")
 }
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  name       String
+  key        String    @unique
+  scope      String    @default("read")
+  createdBy  String    @map("created_by")
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz()
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("api_keys")
+}

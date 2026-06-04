@@ -63,49 +63,51 @@ export default function AdminClientsPage() {
       </div>
 
       {isLoading ? (
-        <p style={{ color: 'rgba(240,240,255,0.4)' }}>Carregando...</p>
+        <p style={{ color: 'var(--text-secondary)' }}>Carregando...</p>
       ) : (
         <div className="glass-card overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr style={{ borderBottom: '1px solid rgba(119,94,252,0.15)' }}>
-                {['Nome', 'Email', 'Plano', 'Instâncias', 'Status', 'Ações'].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 font-semibold" style={{ color: 'rgba(240,240,255,0.5)' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {data?.data.map((t) => (
-                <tr key={t.id} className="glass-card-hover" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                  <td className="px-4 py-3 font-medium">
-                    <a href={`/admin/clients/${t.id}`} style={{ color: '#775EFC' }}>{t.name}</a>
-                  </td>
-                  <td className="px-4 py-3" style={{ color: 'rgba(240,240,255,0.6)' }}>{t.email}</td>
-                  <td className="px-4 py-3" style={{ color: 'rgba(240,240,255,0.6)' }}>
-                    {t.planType === 'unlimited' ? 'Ilimitado' : t.planLimit ? `${t.planLimit} inst.` : t.planType}
-                  </td>
-                  <td className="px-4 py-3" style={{ color: 'rgba(240,240,255,0.6)' }}>{t._count?.instances ?? 0}</td>
-                  <td className="px-4 py-3">
-                    <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: `${statusColor[t.status]}22`, color: statusColor[t.status] }}>
-                      {statusLabel[t.status] ?? t.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    {t.status === 'pending' && (
-                      <button onClick={() => resendMutation.mutate(t.id)} className="text-xs" style={{ color: '#775EFC' }}>
-                        Reenviar convite
-                      </button>
-                    )}
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm min-w-[560px]">
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border-sidebar)' }}>
+                  {['Nome', 'Email', 'Plano', 'Instâncias', 'Status', 'Ações'].map((h) => (
+                    <th key={h} className="text-left px-4 py-3 font-semibold" style={{ color: 'var(--text-secondary)' }}>{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {data?.data.map((t) => (
+                  <tr key={t.id} className="glass-card-hover" style={{ borderBottom: '1px solid rgba(119,94,252,0.06)' }}>
+                    <td className="px-4 py-3 font-medium">
+                      <a href={`/admin/clients/${t.id}`} style={{ color: 'var(--accent)' }}>{t.name}</a>
+                    </td>
+                    <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{t.email}</td>
+                    <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>
+                      {t.planType === 'unlimited' ? 'Ilimitado' : t.planLimit ? `${t.planLimit} inst.` : t.planType}
+                    </td>
+                    <td className="px-4 py-3" style={{ color: 'var(--text-secondary)' }}>{t._count?.instances ?? 0}</td>
+                    <td className="px-4 py-3">
+                      <span className="px-2 py-0.5 rounded-full text-xs font-semibold" style={{ background: `${statusColor[t.status]}22`, color: statusColor[t.status] }}>
+                        {statusLabel[t.status] ?? t.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      {t.status === 'pending' && (
+                        <button onClick={() => resendMutation.mutate(t.id)} className="text-xs" style={{ color: 'var(--accent)' }}>
+                          Reenviar convite
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
           <div className="glass-card p-6 w-full max-w-md">
             <h3 className="text-lg font-bold mb-4">Novo Cliente</h3>
             <form onSubmit={handleCreate} className="flex flex-col gap-3">
@@ -122,7 +124,7 @@ export default function AdminClientsPage() {
               )}
               {formError && <p className="text-sm" style={{ color: '#EF4444' }}>{formError}</p>}
               <div className="flex gap-2 mt-2">
-                <button type="button" className="flex-1 px-4 py-2 rounded-lg text-sm" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(240,240,255,0.6)' }} onClick={() => setShowModal(false)}>Cancelar</button>
+                <button type="button" className="flex-1 px-4 py-2.5 rounded-lg text-sm" style={{ background: 'var(--cancel-bg)', color: 'var(--text-secondary)' }} onClick={() => setShowModal(false)}>Cancelar</button>
                 <button type="submit" className="btn-primary flex-1" disabled={createMutation.isPending}>
                   {createMutation.isPending ? 'Criando...' : 'Criar e Enviar Convite'}
                 </button>

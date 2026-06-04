@@ -23,7 +23,7 @@ export default function ClientInstancesPage() {
       <h2 className="text-xl font-bold mb-6">Minhas Instâncias</h2>
 
       {(data?.data ?? []).length === 0 ? (
-        <div className="glass-card p-12 text-center" style={{ color: 'rgba(240,240,255,0.3)' }}>
+        <div className="glass-card p-12 text-center" style={{ color: 'var(--text-subtle)' }}>
           Nenhuma instância configurada. Contate o suporte.
         </div>
       ) : (
@@ -35,23 +35,20 @@ export default function ClientInstancesPage() {
                 <StatusBadge status={inst.status} />
               </div>
 
-              <p className="text-xs mb-4" style={{ color: 'rgba(240,240,255,0.3)' }}>
+              <p className="text-xs mb-4" style={{ color: 'var(--text-subtle)' }}>
                 Atualizado: {inst.lastPolledAt ? new Date(inst.lastPolledAt).toLocaleTimeString('pt-BR') : '—'}
               </p>
 
               <div className="flex gap-2">
                 {inst.status !== 'online' && (
-                  <button
-                    className="btn-primary flex-1 text-sm"
-                    onClick={() => setQrInstance(inst)}
-                  >
+                  <button className="btn-primary flex-1 text-sm" onClick={() => setQrInstance(inst)}>
                     Reconectar
                   </button>
                 )}
                 {inst.status === 'waiting_qr' && (
                   <button
                     className="flex-1 px-4 py-2 rounded-lg text-sm font-semibold"
-                    style={{ background: 'rgba(119,94,252,0.15)', color: '#775EFC', border: '1px solid rgba(119,94,252,0.3)' }}
+                    style={{ background: 'rgba(119,94,252,0.15)', color: 'var(--accent)', border: '1px solid rgba(119,94,252,0.3)' }}
                     onClick={() => setQrInstance(inst)}
                   >
                     Ver QR Code

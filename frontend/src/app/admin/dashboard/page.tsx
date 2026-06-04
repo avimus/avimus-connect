@@ -76,7 +76,7 @@ export default function AdminDashboardPage() {
 
       {Object.entries(grouped).map(([tenantName, instances]) => (
         <div key={tenantName} className="mb-6">
-          <h3 className="text-sm font-semibold mb-3" style={{ color: 'rgba(240,240,255,0.5)' }}>{tenantName}</h3>
+          <h3 className="text-sm font-semibold mb-3" style={{ color: 'var(--text-secondary)' }}>{tenantName}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {instances.map((inst) => (
               <InstanceCard key={inst.id} instance={inst} onDelete={(id) => deleteMutation.mutate(id)} />
@@ -86,64 +86,38 @@ export default function AdminDashboardPage() {
       ))}
 
       {(data?.data ?? []).length === 0 && (
-        <div className="glass-card p-12 text-center" style={{ color: 'rgba(240,240,255,0.3)' }}>
+        <div className="glass-card p-12 text-center" style={{ color: 'var(--text-subtle)' }}>
           Nenhuma instância cadastrada.
         </div>
       )}
 
       {showCreateModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.7)' }}>
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.7)' }}>
           <div className="glass-card p-6 w-full max-w-md">
             <h3 className="text-lg font-bold mb-4">Nova Instância</h3>
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-
               <div className="flex flex-col gap-1">
-                <label className="text-xs" style={{ color: 'rgba(240,240,255,0.5)' }}>Cliente</label>
-                <select
-                  className="input-dark"
-                  value={form.clientId}
-                  onChange={(e) => setForm({ ...form, clientId: e.target.value })}
-                  required
-                  disabled={clientsLoading}
-                >
-                  <option value="">
-                    {clientsLoading ? 'Carregando clientes...' : 'Selecione o cliente...'}
-                  </option>
+                <label className="text-xs" style={{ color: 'var(--text-secondary)' }}>Cliente</label>
+                <select className="input-dark" value={form.clientId} onChange={(e) => setForm({ ...form, clientId: e.target.value })} required disabled={clientsLoading}>
+                  <option value="">{clientsLoading ? 'Carregando clientes...' : 'Selecione o cliente...'}</option>
                   {(clientsData?.data ?? []).map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name} ({c.email})
-                    </option>
+                    <option key={c.id} value={c.id}>{c.name} ({c.email})</option>
                   ))}
                 </select>
               </div>
-
               <div className="flex flex-col gap-1">
-                <label className="text-xs" style={{ color: 'rgba(240,240,255,0.5)' }}>Nome da instância</label>
-                <input
-                  className="input-dark"
-                  placeholder="Ex: Suporte WhatsApp"
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  required
-                />
+                <label className="text-xs" style={{ color: 'var(--text-secondary)' }}>Nome da instância</label>
+                <input className="input-dark" placeholder="Ex: Suporte WhatsApp" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
               </div>
-
               {createError && <p className="text-sm" style={{ color: '#EF4444' }}>{createError}</p>}
-
               <div className="flex gap-2 mt-2">
-                <button
-                  type="button"
-                  className="flex-1 px-4 py-2 rounded-lg text-sm"
-                  style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(240,240,255,0.6)' }}
-                  onClick={handleClose}
-                >
+                <button type="button" className="flex-1 px-4 py-2.5 rounded-lg text-sm" style={{ background: 'var(--cancel-bg)', color: 'var(--text-secondary)' }} onClick={handleClose}>
                   Cancelar
                 </button>
                 <button type="submit" className="btn-primary flex-1" disabled={createMutation.isPending || clientsLoading}>
                   {createMutation.isPending ? 'Criando...' : 'Criar'}
                 </button>
               </div>
-
             </form>
           </div>
         </div>

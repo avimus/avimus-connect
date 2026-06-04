@@ -25,7 +25,7 @@ export function InstanceCard({ instance, onDelete }: InstanceCardProps) {
         <div className="flex-1 min-w-0">
           <p className="font-semibold truncate">{instance.name}</p>
           {instance.tenant && (
-            <p className="text-xs mt-0.5 truncate" style={{ color: 'rgba(240,240,255,0.4)' }}>
+            <p className="text-xs mt-0.5 truncate" style={{ color: 'var(--text-subtle)' }}>
               {instance.tenant.name}
             </p>
           )}
@@ -34,7 +34,7 @@ export function InstanceCard({ instance, onDelete }: InstanceCardProps) {
       </div>
 
       <div className="flex items-center justify-between">
-        <p className="text-xs" style={{ color: 'rgba(240,240,255,0.3)' }}>
+        <p className="text-xs" style={{ color: 'var(--text-subtle)' }}>
           Atualizado: {lastSeen}
         </p>
         {onDelete && (

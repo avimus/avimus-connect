@@ -31,16 +31,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#0A0A0F' }}>
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--bg-primary)' }}>
       <div className="glass-card p-8 w-full max-w-sm">
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold mb-1" style={{ color: '#775EFC' }}>Ávimus Connect</h1>
-          <p className="text-sm" style={{ color: 'rgba(240,240,255,0.5)' }}>Gerenciamento WhatsApp</p>
+          <h1 className="text-2xl font-bold mb-1" style={{ color: 'var(--accent)' }}>Ávimus Connect</h1>
+          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>Gerenciamento WhatsApp</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(240,240,255,0.7)' }}>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--text-label)' }}>
               Email
             </label>
             <input
@@ -55,7 +55,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1.5" style={{ color: 'rgba(240,240,255,0.7)' }}>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--text-label)' }}>
               Senha
             </label>
             <input

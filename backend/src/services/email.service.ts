@@ -36,6 +36,7 @@ export async function sendInviteEmail(params: {
   console.log('[email] sendInviteEmail → to:', params.to)
   console.log('[email] sendInviteEmail → data:', JSON.stringify(data, null, 2))
   console.log('[email] sendInviteEmail → error:', JSON.stringify(error, null, 2))
+  if (error) throw new Error(`Resend error: ${error.message}`)
 }
 
 export async function sendAlertEmail(params: {
@@ -46,7 +47,7 @@ export async function sendAlertEmail(params: {
 }): Promise<void> {
   const dateStr = params.occurredAt.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
 
-  await resend.emails.send({
+  const { error: alertError } = await resend.emails.send({
     from: env.RESEND_FROM,
     to: params.to,
     subject: `⚠️ Instância "${params.instanceName}" desconectada`,
@@ -66,4 +67,5 @@ export async function sendAlertEmail(params: {
       </div>
     `,
   })
+  if (alertError) throw new Error(`Resend error: ${alertError.message}`)
 }

@@ -30,6 +30,19 @@ app.use('/api/v1/admin', adminInstancesRoutes)
 import clientInstancesRoutes from './routes/client/instances.routes'
 app.use('/api/v1/client', clientInstancesRoutes)
 
+// Routes — API Keys (admin)
+import apiKeysRoutes from './routes/admin/apikeys.routes'
+app.use('/api/v1/admin/api-keys', apiKeysRoutes)
+
+// Routes — External API
+import externalRoutes from './routes/external/external.routes'
+app.use('/api/external', externalRoutes)
+
+// Swagger UI
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './swagger/spec'
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
 app.use(errorHandler)
 
 const server = app.listen(env.PORT, () => {
