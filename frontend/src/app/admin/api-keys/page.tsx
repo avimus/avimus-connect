@@ -72,7 +72,7 @@ export default function ApiKeysPage() {
         </div>
         <div className="flex items-center gap-3">
           <a href={docsUrl} target="_blank" rel="noopener noreferrer" className="text-sm" style={{ color: 'var(--accent)' }}>
-            Ver Documentação →
+            Docs Ávimus Connect →
           </a>
           <a href="http://34.171.150.35:21465/api-docs/#/" target="_blank" rel="noopener noreferrer" className="text-sm" style={{ color: 'var(--accent)' }}>
             Docs WPPConnect →
