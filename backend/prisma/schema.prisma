@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String        @db.VarChar(255)
+  email       String        @unique @db.VarChar(255)
+  planType    String        @map("plan_type") @db.VarChar(20)
+  planLimit   Int?          @map("plan_limit")
+  status      String        @default("pending") @db.VarChar(20)
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamptz()
+  users       User[]
+  invites     InviteToken[]
+  instances   Instance[]
+
+  @@map("tenants")
+}
+
+model User {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String?  @map("tenant_id") @db.Uuid
+  email        String   @unique @db.VarChar(255)
+  passwordHash String?  @map("password_hash") @db.VarChar(255)
+  role         String   @db.VarChar(10)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+  tenant       Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("users")
+}
+
+model InviteToken {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String    @map("tenant_id") @db.Uuid
+  token     String    @unique @db.VarChar(255)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz()
+  usedAt    DateTime? @map("used_at") @db.Timestamptz()
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@map("invite_tokens")
+}
+
+model Instance {
+  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String     @map("tenant_id") @db.Uuid
+  name            String     @db.VarChar(255)
+  wppSessionId    String     @unique @map("wpp_session_id") @db.VarChar(255)
+  wppToken        String?    @map("wpp_token") @db.Text
+  status          String     @default("waiting_qr") @db.VarChar(20)
+  lastKnownStatus String?    @map("last_known_status") @db.VarChar(20)
+  lastAlertSentAt DateTime?  @map("last_alert_sent_at") @db.Timestamptz()
+  lastPolledAt    DateTime?  @map("last_polled_at") @db.Timestamptz()
+  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime   @updatedAt @map("updated_at") @db.Timestamptz()
+  tenant          Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  eventLogs       EventLog[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("instances")
+}
+
+model EventLog {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  instanceId String   @map("instance_id") @db.Uuid
+  tenantId   String   @map("tenant_id") @db.Uuid
+  eventType  String   @map("event_type") @db.VarChar(30)
+  occurredAt DateTime @default(now()) @map("occurred_at") @db.Timestamptz()
+  details    Json?
+  instance   Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([instanceId])
+  @@index([occurredAt(sort: Desc)])
+  @@map("event_logs")
+}
