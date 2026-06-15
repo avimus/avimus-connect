@@ -7,6 +7,7 @@ declare global {
   namespace Express {
     interface Request {
       apiKey?: ApiKeyRecord
+      allowedInstanceIds?: string[]
     }
   }
 }
@@ -23,5 +24,6 @@ export async function requireApiKey(req: Request, res: Response, next: NextFunct
     return
   }
   req.apiKey = record
+  req.allowedInstanceIds = record.allowedInstances.map((r) => r.instanceId)
   next()
 }

@@ -50,19 +50,20 @@ model InviteToken {
 }
 
 model Instance {
-  id              String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  tenantId        String     @map("tenant_id") @db.Uuid
-  name            String     @db.VarChar(255)
-  wppSessionId    String     @unique @map("wpp_session_id") @db.VarChar(255)
-  wppToken        String?    @map("wpp_token") @db.Text
-  status          String     @default("waiting_qr") @db.VarChar(20)
-  lastKnownStatus String?    @map("last_known_status") @db.VarChar(20)
-  lastAlertSentAt DateTime?  @map("last_alert_sent_at") @db.Timestamptz()
-  lastPolledAt    DateTime?  @map("last_polled_at") @db.Timestamptz()
-  createdAt       DateTime   @default(now()) @map("created_at") @db.Timestamptz()
-  updatedAt       DateTime   @updatedAt @map("updated_at") @db.Timestamptz()
-  tenant          Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  id              String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId        String           @map("tenant_id") @db.Uuid
+  name            String           @db.VarChar(255)
+  wppSessionId    String           @unique @map("wpp_session_id") @db.VarChar(255)
+  wppToken        String?          @map("wpp_token") @db.Text
+  status          String           @default("waiting_qr") @db.VarChar(20)
+  lastKnownStatus String?          @map("last_known_status") @db.VarChar(20)
+  lastAlertSentAt DateTime?        @map("last_alert_sent_at") @db.Timestamptz()
+  lastPolledAt    DateTime?        @map("last_polled_at") @db.Timestamptz()
+  createdAt       DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt       DateTime         @updatedAt @map("updated_at") @db.Timestamptz()
+  tenant          Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   eventLogs       EventLog[]
+  apiKeyInstances ApiKeyInstance[]
 
   @@index([tenantId])
   @@index([status])
@@ -85,14 +86,26 @@ model EventLog {
 }
 
 model ApiKey {
-  id         String    @id @default(cuid())
-  name       String
-  key        String    @unique
-  scope      String    @default("read")
-  createdBy  String    @map("created_by")
-  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz()
-  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz()
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  id               String           @id @default(cuid())
+  name             String
+  key              String           @unique
+  scope            String           @default("read")
+  createdBy        String           @map("created_by")
+  lastUsedAt       DateTime?        @map("last_used_at") @db.Timestamptz()
+  revokedAt        DateTime?        @map("revoked_at") @db.Timestamptz()
+  createdAt        DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+  allowedInstances ApiKeyInstance[]
 
   @@map("api_keys")
+}
+
+model ApiKeyInstance {
+  apiKeyId   String   @map("api_key_id")
+  instanceId String   @map("instance_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  apiKey     ApiKey   @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  instance   Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+
+  @@id([apiKeyId, instanceId])
+  @@map("api_key_instances")
 }

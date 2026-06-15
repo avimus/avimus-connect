@@ -81,6 +81,34 @@ export const swaggerSpec = {
         },
       },
     },
+    '/instances/{id}/reconnect': {
+      post: {
+        summary: 'Reconectar instância',
+        tags: ['Instâncias'],
+        parameters: [{ name: 'id', in: 'path', required: true, schema: { type: 'string' } }],
+        responses: {
+          '202': {
+            description: 'Reconexão iniciada',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    instanceId: { type: 'string' },
+                    status: { type: 'string', enum: ['waiting_qr'] },
+                    qrcode: { type: 'string', nullable: true },
+                    message: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+          '400': { description: 'Instância já está online', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          '401': { description: 'Não autorizado', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+          '404': { description: 'Instância não encontrada', content: { 'application/json': { schema: { $ref: '#/components/schemas/Error' } } } },
+        },
+      },
+    },
     '/clients': {
       get: {
         summary: 'Listar todos os clientes',
