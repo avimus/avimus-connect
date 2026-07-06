@@ -35,12 +35,15 @@
 | Item | Valor |
 |------|-------|
 | Nome | `wpp-service-vm` |
-| IP Externo | `34.171.150.35` |
+| IP Externo | `34.46.218.34` |
+| Tipo | `e2-small` (2 vCPU, 2GB RAM) |
 | Zona | `us-central1-a` |
-| Serviço | WPPConnect Server |
-| API | http://34.171.150.35:21465 |
+| Serviço | WPPConnect Server (Docker, build local a partir do repo oficial) |
+| API | http://34.46.218.34:21465 |
 | Secret | `THISISMYSECURETOKEN` |
-| Docs | http://34.171.150.35:21465/api-docs/#/ |
+| Docs | http://34.46.218.34:21465/api-docs/#/ |
+| Repo | `~/wppconnect-server` (clone de github.com/wppconnect-team/wppconnect-server) |
+| Recriada em | 2026-07-06 (VM anterior foi deletada, IP e sessões antigas perdidos) |
 
 ---
 
@@ -211,6 +214,7 @@ sudo certbot renew
 |-------|--------|-----|
 | avimus-connect-ports | 80, 3000, 3001 | http-server |
 | avimus-https | 443 | http-server |
+| wpp-connect-port | 21465 | wppconnect-server (só na wpp-service-vm) |
 
 ```powershell
 # Listar regras (PowerShell local)

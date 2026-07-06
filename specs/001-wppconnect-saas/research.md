@@ -7,7 +7,7 @@
 ## 1. WPPConnect API Integration
 
 ### Decisão
-Integrar via HTTP REST ao servidor WPPConnect em `http://34.171.150.35:21465` usando axios.
+Integrar via HTTP REST ao servidor WPPConnect em `http://34.46.218.34:21465` usando axios.
 Cada instância WhatsApp corresponde a uma "sessão" no WPPConnect, identificada pelo campo
 `wpp_session_id` no banco de dados.
 

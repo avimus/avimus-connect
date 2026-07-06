@@ -6,7 +6,7 @@
 
 - Node.js 20 LTS
 - PostgreSQL 15 (local ou Docker)
-- Acesso ao servidor WPPConnect (`http://34.171.150.35:21465`)
+- Acesso ao servidor WPPConnect (`http://34.46.218.34:21465`)
 - Conta Resend com API key
 
 ---
@@ -39,7 +39,7 @@ JWT_SECRET="seu-segredo-aqui-minimo-32-chars"
 JWT_EXPIRY="24h"
 
 # WPPConnect
-WPP_BASE_URL="http://34.171.150.35:21465"
+WPP_BASE_URL="http://34.46.218.34:21465"
 WPP_SECRET_KEY="seu-wpp-secret-key"
 
 # Resend

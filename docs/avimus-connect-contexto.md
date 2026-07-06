@@ -22,10 +22,10 @@
 | Frontend (prod) | https://connect.avimus.com.br |
 | Backend (prod) | https://connect.avimus.com.br/api/v1 |
 | Swagger docs | https://connect.avimus.com.br/api/docs/ |
-| WPPConnect | http://34.171.150.35:21465 |
-| WPP Docs | http://34.171.150.35:21465/api-docs/#/ |
+| WPPConnect | http://34.46.218.34:21465 |
+| WPP Docs | http://34.46.218.34:21465/api-docs/#/ |
 | VM prod | avimus-connect-vm / us-central1-a / IP: 34.31.134.203 |
-| VM WPP | wpp-service-vm / us-central1-a / IP: 34.171.150.35 |
+| VM WPP | wpp-service-vm / us-central1-a / IP: 34.46.218.34 (recriada 2026-07-06) |
 | GCP Project | avimus-connect |
 
 ### VM Produção
@@ -55,7 +55,7 @@ Senha: (alterada via banco — password_hash na tabela users)
 ```
 DATABASE_URL=postgresql://avimus:avimus123@localhost:5432/avimus_connect
 JWT_SECRET=avimus_jwt_secret_producao_2026
-WPP_BASE_URL=http://34.171.150.35:21465
+WPP_BASE_URL=http://34.46.218.34:21465
 WPP_SECRET_KEY=THISISMYSECURETOKEN
 RESEND_API_KEY=<chave real no servidor>
 RESEND_FROM=noreply@avimus.com.br
